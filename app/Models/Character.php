@@ -9,8 +9,34 @@ class Character extends Model
 {
     use HasFactory;
 
+    protected $dates = [
+        'last_task_tick'
+    ];
+
     public function character_skills()
     {
         return $this->hasMany(CharacterSkill::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(CharacterItem::class);
+    }
+
+    public function addItem(Item $item, int $quantity)
+    {
+        // Check if character has an item
+        $item = $this->items()->firstOrCreate([
+            'item_id' => $item->id
+        ],
+        [
+            'item_id' => $item->id,
+            'quantity' => 0,
+            'character_id' => $this->id,
+        ]);
+
+        $item->quantity += $quantity;
+
+        return $item->save();
     }
 }

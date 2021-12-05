@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+
+    public function start(Task $task)
+    {
+        dd($task);
+        return redirect()->back();
+    }
+
     /**
      * Display a listing of the resource.
      *

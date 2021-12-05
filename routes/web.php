@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Task;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,16 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+Route::get('/test', function() {
+
+    $tasks = Task::with('active_characters')->get();
+
+    dd($tasks);
+
+});
+
 Route::group(['middleware' => 'auth:web'], function() {
     Route::resource('skill', \App\Http\Controllers\SkillController::class);
+    Route::get('/task/{task}/start', [\App\Http\Controllers\TaskController::class, 'start'])->name('task.start');
 });

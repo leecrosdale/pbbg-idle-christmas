@@ -22,7 +22,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('skill_level_required')->default(0);
             $table->json('items_required')->nullable();
             $table->json('skills_gained')->nullable();
-
+            $table->unsignedBigInteger('time_in_seconds')->default(1);
             $table->timestamps();
         });
     }

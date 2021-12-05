@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCharacterInventoriesTable extends Migration
+class CreateCharacterItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCharacterInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('character_inventories', function (Blueprint $table) {
+        Schema::create('character_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('character_id')->constrained();
             $table->foreignId('item_id')->constrained();
@@ -29,6 +29,6 @@ class CreateCharacterInventoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('character_inventories');
+        Schema::dropIfExists('character_items');
     }
 }

@@ -15,5 +15,7 @@ class ItemSeeder extends Seeder
     public function run()
     {
         $smallLog = Item::factory()->create(['name' => 'Small Log', 'slug' => 'small-log']);
+        $mediumLog = Item::factory()->create(['name' => 'Medium Log', 'slug' => 'medium-log']);
+        $largeLog = Item::factory()->create(['name' => 'Large Log', 'slug' => 'large-log']);
     }
 }

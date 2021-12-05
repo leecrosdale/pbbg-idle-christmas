@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CharacterInventory;
+use App\Models\CharacterItem;
 use Illuminate\Http\Request;
 
 class CharacterInventoryController extends Controller
@@ -41,10 +41,10 @@ class CharacterInventoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CharacterInventory  $characterInventory
+     * @param  \App\Models\CharacterItem  $characterInventory
      * @return \Illuminate\Http\Response
      */
-    public function show(CharacterInventory $characterInventory)
+    public function show(CharacterItem $characterInventory)
     {
         //
     }
@@ -52,10 +52,10 @@ class CharacterInventoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CharacterInventory  $characterInventory
+     * @param  \App\Models\CharacterItem  $characterInventory
      * @return \Illuminate\Http\Response
      */
-    public function edit(CharacterInventory $characterInventory)
+    public function edit(CharacterItem $characterInventory)
     {
         //
     }
@@ -64,10 +64,10 @@ class CharacterInventoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CharacterInventory  $characterInventory
+     * @param  \App\Models\CharacterItem  $characterInventory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CharacterInventory $characterInventory)
+    public function update(Request $request, CharacterItem $characterInventory)
     {
         //
     }
@@ -75,10 +75,10 @@ class CharacterInventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CharacterInventory  $characterInventory
+     * @param  \App\Models\CharacterItem  $characterInventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CharacterInventory $characterInventory)
+    public function destroy(CharacterItem $characterInventory)
     {
         //
     }

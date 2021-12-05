@@ -14,4 +14,16 @@ class Task extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function characters()
+    {
+        return $this->hasMany(Character::class);
+    }
+
+    public function active_characters()
+    {
+        return $this->hasMany(Character::class, 'active_task_id');
+    }
+
+
+
 }

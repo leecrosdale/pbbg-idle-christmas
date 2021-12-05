@@ -22,15 +22,34 @@ class TaskSeeder extends Seeder
 
         // Items
         $smallLog = Item::where(['slug' => 'small-log'])->first();
+        $mediumLog = Item::where(['slug' => 'medium-log'])->first();
+        $largeLog = Item::where(['slug' => 'large-log'])->first();
 
 
         // Tasks
         $chopSmallTree = Task::factory()->create(
             [
-                'name' => 'chop',
+                'name' => 'Chop Small Tree',
                 'skill_id' => $chopping->id,
                 'item_id' => $smallLog->id
             ]
         );
+
+        $chopMediumTree = Task::factory()->create(
+            [
+                'name' => 'Chop Medium Tree',
+                'skill_id' => $chopping->id,
+                'item_id' => $mediumLog->id
+            ]
+        );
+
+        $chopLargeTree = Task::factory()->create(
+            [
+                'name' => 'Chop Large Tree',
+                'skill_id' => $chopping->id,
+                'item_id' => $largeLog->id
+            ]
+        );
+
     }
 }
