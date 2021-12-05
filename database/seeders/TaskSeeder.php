@@ -31,7 +31,8 @@ class TaskSeeder extends Seeder
             [
                 'name' => 'Chop Small Tree',
                 'skill_id' => $chopping->id,
-                'item_id' => $smallLog->id
+                'item_id' => $smallLog->id,
+                'time_in_seconds' => 1
             ]
         );
 
@@ -39,7 +40,8 @@ class TaskSeeder extends Seeder
             [
                 'name' => 'Chop Medium Tree',
                 'skill_id' => $chopping->id,
-                'item_id' => $mediumLog->id
+                'item_id' => $mediumLog->id,
+                'time_in_seconds' => 3
             ]
         );
 
@@ -47,7 +49,8 @@ class TaskSeeder extends Seeder
             [
                 'name' => 'Chop Large Tree',
                 'skill_id' => $chopping->id,
-                'item_id' => $largeLog->id
+                'item_id' => $largeLog->id,
+                'time_in_seconds' => 5
             ]
         );
 
