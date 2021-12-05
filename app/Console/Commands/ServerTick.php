@@ -46,12 +46,13 @@ class ServerTick extends Command
         do {
 
             $start = microtime(true);
+            $this->comment("Starting loop {$loopCount}");
 
             $tasks = Task::with('active_characters')->get();
 
             foreach($tasks as $task)
             {
-                $this->comment("Executing {$task->name}");
+//                $this->comment("Executing {$task->name}");
 
                 $characters = $task->active_characters;
                 $itemGained = $task->item;
@@ -60,13 +61,21 @@ class ServerTick extends Command
 
                 foreach ($characters as $character)
                 {
-                    $this->comment("Giving {$character->name} {$quantityGained} x {$itemGained->name}");
-                    $character->addItem($itemGained, $quantityGained);
-                    $character->last_task_tick = now();
-                    $character->save();
+
+                    if (!$character->last_task_tick) {
+                        $character->tickTask();
+                    }
+
+                    if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
+
+                        $this->comment("Giving {$character->name} {$quantityGained} x {$itemGained->name}");
+
+                        $character->addItem($itemGained, $quantityGained);
+                        $character->tickTask();
+                    }
                 }
 
-                $this->comment("Finished executing {$task->name}");
+//                $this->comment("Finished executing {$task->name}");
             }
 
             $loopCount++;
@@ -74,7 +83,7 @@ class ServerTick extends Command
             $time_elapsed_secs = microtime(true) - $start;
             $wait_time_seconds = (1 - $time_elapsed_secs) * 1000000;
 
-            $this->comment("Completed in {$time_elapsed_secs} - waiting {$wait_time_seconds}");
+            $this->comment("Completed {$loopCount} in {$time_elapsed_secs} - waiting {$wait_time_seconds}");
 
             usleep($wait_time_seconds);
 
