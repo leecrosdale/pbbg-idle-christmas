@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\TaskCategory;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class TaskCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $taskCategory
+     * @param  \App\Models\TaskCategory  $taskCategory
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $taskCategory)
+    public function show(TaskCategory $taskCategory)
     {
         //
     }
@@ -52,10 +52,10 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Category  $taskCategory
+     * @param  \App\Models\TaskCategory  $taskCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $taskCategory)
+    public function edit(TaskCategory $taskCategory)
     {
         //
     }
@@ -64,10 +64,10 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $taskCategory
+     * @param  \App\Models\TaskCategory  $taskCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $taskCategory)
+    public function update(Request $request, TaskCategory $taskCategory)
     {
         //
     }
@@ -75,10 +75,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $taskCategory
+     * @param  \App\Models\TaskCategory  $taskCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $taskCategory)
+    public function destroy(TaskCategory $taskCategory)
     {
         //
     }

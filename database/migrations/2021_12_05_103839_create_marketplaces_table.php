@@ -15,6 +15,12 @@ class CreateMarketplacesTable extends Migration
     {
         Schema::create('marketplaces', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->foreignId('seller_id')->constrained('characters');
+            $table->foreignId('item_id')->constrained();
+            $table->unsignedBigInteger('quantity')->default(1);
+            $table->unsignedBigInteger('price');
+            $table->foreignId('buyer_id')->nullable()->constrained('characters');
             $table->timestamps();
         });
     }

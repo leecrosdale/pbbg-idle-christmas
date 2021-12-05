@@ -15,6 +15,10 @@ class CreateCharacterSkillsTable extends Migration
     {
         Schema::create('character_skills', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('character_id')->constrained();
+            $table->foreignId('skill_id')->constrained();
+            $table->unsignedBigInteger('level')->default(0);
+            $table->unsignedBigInteger('experience')->default(0);
             $table->timestamps();
         });
     }

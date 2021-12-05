@@ -15,6 +15,8 @@ class CreateCountryDemandsTable extends Migration
     {
         Schema::create('country_demands', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id')->constrained();
+            $table->json('item_demands')->nullable();
             $table->timestamps();
         });
     }

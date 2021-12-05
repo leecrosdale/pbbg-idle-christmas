@@ -15,6 +15,9 @@ class CreateCharacterInventoriesTable extends Migration
     {
         Schema::create('character_inventories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('character_id')->constrained();
+            $table->foreignId('item_id')->constrained();
+            $table->unsignedBigInteger('quantity');
             $table->timestamps();
         });
     }
