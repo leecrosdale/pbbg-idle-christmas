@@ -52,6 +52,13 @@
                                 </li>
                             @endif
                         @else
+
+                            @foreach(auth()->user()->character->character_skills as $skill)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('skill.show', $skill->skill->slug) }}">{{ $skill->skill->name }} ({{$skill->level}} / {{ $skill->skill->max_level }})</a>
+                            </li>
+                            @endforeach
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -76,7 +83,22 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+
+
+
+                @yield('content')
         </main>
     </div>
 </body>

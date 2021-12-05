@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skill;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class SkillController extends Controller
@@ -46,7 +47,10 @@ class SkillController extends Controller
      */
     public function show(Skill $skill)
     {
-        //
+        $character = auth()->user()->character;
+        $characterSkill = $character->character_skills()->where('skill_id', $skill->id)->firstOrCreate();
+        $tasks = Task::where('skill_id', $skill->id)->get();
+        return view('skills.show', compact('skill', 'characterSkill', 'tasks'));
     }
 
     /**

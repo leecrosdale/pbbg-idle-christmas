@@ -20,6 +20,7 @@ class CreateCharactersTable extends Migration
             $table->unsignedBigInteger('elves_assigned')->default(0);
             $table->unsignedBigInteger('coins')->default(100);
             $table->foreignId('active_task_id')->nullable()->constrained('tasks');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
 }
