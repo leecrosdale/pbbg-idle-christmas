@@ -43,53 +43,51 @@ class ServerTick extends Command
         $loopCount = 0;
         $totalLoops = 60;
 
-        do {
+        while (true) {
+            do {
 
-            $start = microtime(true);
-            $this->comment("Starting loop {$loopCount}");
+                $start = microtime(true);
+                $this->comment("Starting loop {$loopCount}");
 
-            $tasks = Task::with('active_characters')->get();
+                $tasks = Task::with('active_characters')->get();
 
-            foreach($tasks as $task)
-            {
+                foreach ($tasks as $task) {
 //                $this->comment("Executing {$task->name}");
 
-                $characters = $task->active_characters;
-                $itemGained = $task->item;
-                $quantityGained = $task->item_quantity;
-                $taskTimeInSeconds = $task->time_in_seconds;
+                    $characters = $task->active_characters;
+                    $itemGained = $task->item;
+                    $quantityGained = $task->item_quantity;
+                    $taskTimeInSeconds = $task->time_in_seconds;
 
-                foreach ($characters as $character)
-                {
+                    foreach ($characters as $character) {
+                        if (!$character->last_task_tick) {
+                            $character->tickTask();
+                        }
 
-                    if (!$character->last_task_tick) {
-                        $character->tickTask();
+                        if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
+                            $this->comment("Giving {$character->name} {$quantityGained} x {$itemGained->name}");
+                            $character->addItem($itemGained, $quantityGained);
+                            $character->tickTask();
+                        }
                     }
-
-                    if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
-
-                        $this->comment("Giving {$character->name} {$quantityGained} x {$itemGained->name}");
-
-                        $character->addItem($itemGained, $quantityGained);
-                        $character->tickTask();
-                    }
-                }
 
 //                $this->comment("Finished executing {$task->name}");
-            }
+                }
 
-            $loopCount++;
+                $loopCount++;
 
-            $time_elapsed_secs = microtime(true) - $start;
-            $wait_time_seconds = (1 - $time_elapsed_secs) * 1000000;
+                $time_elapsed_secs = microtime(true) - $start;
+                $wait_time_seconds = (1 - $time_elapsed_secs) * 1000000;
 
-            $this->comment("Completed {$loopCount} in {$time_elapsed_secs} - waiting {$wait_time_seconds}");
+                $this->comment("Completed {$loopCount} in {$time_elapsed_secs} - waiting {$wait_time_seconds}");
 
-            usleep($wait_time_seconds);
+                usleep($wait_time_seconds);
 
-        } while($loopCount < $totalLoops);
+            } while ($loopCount < $totalLoops);
 
+        }
 
-        return Command::SUCCESS;
+//
+//        return Command::SUCCESS;
     }
 }

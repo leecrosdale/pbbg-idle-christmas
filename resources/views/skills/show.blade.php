@@ -8,14 +8,16 @@
                     <div class="card-header">{{ __($skill->name) }}</div>
 
                     <div class="card-body">
-
                         @foreach ($tasks as $task)
-                            <a href="{{ route('task.start', $task) }}">
-                                <div class="col-md-3 border m-3 p-3 bg-secondary text-white-50">
-                                    {{ $task->name }} - {{ $task->item->name }}
-                                    {{ $character->items()->where('item_id', $task->item->id)->first()->qty ?? 0 }}
-                                </div>
-                            </a>
+                            <task-component
+                                :task="{{ $task }}"
+                                :item="{{ $task->item }}"
+                                :start_quantity="{{ $character->items()->where('item_id', $task->item_id)->first()->quantity ?? 0 }}"
+                                :quantity_per_tick="{{ $task->item_quantity }}"
+                                :seconds_per_tick="{{ $task->time_in_seconds }}"
+                                :active_task="{{ json_encode($character->active_task_id === $task->id) }}"
+                            >
+                            </task-component>
                         @endforeach
                     </div>
                 </div>

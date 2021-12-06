@@ -40,6 +40,13 @@ class Character extends Model
         return $item->save();
     }
 
+    public function setActiveTask(Task $task)
+    {
+        //TODO check character can actually do that task.
+        $this->active_task_id = $task->id;
+        $this->save();
+    }
+
     public function tickTask()
     {
         $this->last_task_tick = now();

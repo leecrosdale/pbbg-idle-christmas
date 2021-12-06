@@ -10,7 +10,8 @@ class TaskController extends Controller
 
     public function start(Task $task)
     {
-        dd($task);
+        $character = auth()->user()->character;
+        $character->setActiveTask($task);
         return redirect()->back();
     }
 
