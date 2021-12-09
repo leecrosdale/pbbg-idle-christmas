@@ -1,8 +1,10 @@
 <template>
 
-    <div @click="start" class="col-md-3 border m-3 p-3 bg-secondary text-white-50">
-        {{ task.name }} - {{ item.name }}
-        {{ quantity }}
+    <div @click="start" class="col-md-6 border m-3 p-3 text-center text-white-50" :class="isActive ? 'bg-primary' : 'bg-secondary'">
+        <div>{{ task.name }}</div>
+        <div>{{ task.title }}</div>
+        <div>{{ task.item_quantity}} x {{ item.name }}</div>
+        <div>every {{ task.time_in_seconds }} seconds</div>
 
         <div class="progress w-100">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
@@ -13,11 +15,17 @@
                  v-bind:style="{ width: currentProgress + '%', height: '1rem' }">
             </div>
         </div>
+
+        <span class="badge bg-danger">{{ quantity }}</span>
+
     </div>
 
 </template>
 
 <script>
+
+import {mapGetters, mapActions} from 'vuex';
+
 export default {
     name: "TaskComponent",
     created() {
@@ -58,34 +66,57 @@ export default {
     data() {
         return {
             quantity: this.start_quantity,
-            interval: null,
+            intervalId: null,
             currentProgress: 0,
             currentSeconds: 0,
         }
     },
+    computed: {
+        ...mapGetters({
+            activeTask: 'task/getActiveTask'
+        }),
+        isActive() {
+            return this.activeTask.id === this.task.id;
+        }
+    },
     methods: {
-
+        ...mapActions({
+           setActiveTask: 'task/setActiveTask',
+        }),
         start() {
             axios.get('/task/' + this.task.id + '/start').then(response => {
-                this.interval = window.setInterval(() => this.tick(), 1000);
+                this.setActiveTask(this.task);
+                this.startTick();
             });
         },
+        startTick() {
+            this.intervalId = setInterval(() => this.tick(), 1000);
+        },
         tick() {
+            if (this.activeTask.id !== this.task.id) {
+                this.stop();
+                return;
+            }
+
             this.currentSeconds++;
 
             this.recalculateCurrentProgress();
 
             if (this.currentSeconds >= this.seconds_per_tick) {
+
+                this.stop();
                 this.quantity += this.quantity_per_tick;
                 this.currentSeconds = 0;
+
+                axios.get('/task/' + this.task.id + '/work').then(response => {
+                    this.startTick();
+                    this.recalculateCurrentProgress();
+                });
             }
-
-            this.recalculateCurrentProgress();
-
-
         },
         stop() {
-            clearInterval(this.interval)
+            clearInterval(this.intervalId)
+            this.intervalId = null;
         },
         recalculateCurrentProgress() {
             const upper = this.seconds_per_tick;

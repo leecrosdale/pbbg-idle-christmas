@@ -47,9 +47,14 @@ class Character extends Model
         $this->save();
     }
 
-    public function tickTask()
+    public function tickTask($clientTick = true)
     {
         $this->last_task_tick = now();
+
+        if ($clientTick) {
+            $this->last_task_client_tick = now();
+        }
+
         $this->save();
     }
 }

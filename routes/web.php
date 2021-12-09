@@ -34,4 +34,5 @@ Route::get('/test', function() {
 Route::group(['middleware' => 'auth:web'], function() {
     Route::resource('skill', \App\Http\Controllers\SkillController::class);
     Route::get('/task/{task}/start', [\App\Http\Controllers\TaskController::class, 'start'])->name('task.start');
+    Route::get('/task/{task}/work', [\App\Http\Controllers\TaskController::class, 'work'])->name('task.work');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Character;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,19 @@ class TaskController extends Controller
 
     public function start(Task $task)
     {
+        /** @var Character $character */
         $character = auth()->user()->character;
         $character->setActiveTask($task);
+        $character->tickTask(true);
+
         return redirect()->back();
+    }
+
+    public function work(Task $task)
+    {
+        $character = auth()->user()->character;
+        $task->work($character, true);
+        return $task;
     }
 
     /**

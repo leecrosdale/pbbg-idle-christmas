@@ -52,26 +52,10 @@ class ServerTick extends Command
                 $tasks = Task::with('active_characters')->get();
 
                 foreach ($tasks as $task) {
-//                $this->comment("Executing {$task->name}");
-
                     $characters = $task->active_characters;
-                    $itemGained = $task->item;
-                    $quantityGained = $task->item_quantity;
-                    $taskTimeInSeconds = $task->time_in_seconds;
-
                     foreach ($characters as $character) {
-                        if (!$character->last_task_tick) {
-                            $character->tickTask();
-                        }
-
-                        if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
-                            $this->comment("Giving {$character->name} {$quantityGained} x {$itemGained->name}");
-                            $character->addItem($itemGained, $quantityGained);
-                            $character->tickTask();
-                        }
+                        $task->work($character, false);
                     }
-
-//                $this->comment("Finished executing {$task->name}");
                 }
 
                 $loopCount++;
