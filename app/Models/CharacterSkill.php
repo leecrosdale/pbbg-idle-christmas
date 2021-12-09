@@ -13,4 +13,17 @@ class CharacterSkill extends Model
     {
         return $this->belongsTo(Skill::class);
     }
+
+    public function addExperience(int $exp)
+    {
+        $this->experience += $exp;
+
+        if ($this->experience > ($this->level * 110 * $this->level))
+        {
+            $this->level += 1;
+        }
+
+        $this->save();
+
+    }
 }

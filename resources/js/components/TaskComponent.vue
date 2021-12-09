@@ -6,6 +6,13 @@
         <div>{{ task.item_quantity}} x {{ item.name }}</div>
         <div>every {{ task.time_in_seconds }} seconds</div>
 
+        <div v-if="task.items_required">
+            Requires
+            <p v-for="(qty, slug) in task.items_required">
+                {{ qty }} x {{ slug }}
+            </p>
+        </div>
+
         <div class="progress w-100">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                  role="progressbar"
@@ -105,12 +112,18 @@ export default {
             if (this.currentSeconds >= this.seconds_per_tick) {
 
                 this.stop();
-                this.quantity += this.quantity_per_tick;
+                // this.quantity += this.quantity_per_tick;
                 this.currentSeconds = 0;
 
                 axios.get('/task/' + this.task.id + '/work').then(response => {
+                    this.quantity += response.data.item_quantity;
                     this.startTick();
                     this.recalculateCurrentProgress();
+                }).catch(error => {
+                    console.log(error);
+                    this.currentSeconds = 0;
+                    this.stop();
+                    this.setActiveTask({});
                 });
             }
         },

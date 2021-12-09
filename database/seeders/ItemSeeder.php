@@ -21,5 +21,6 @@ class ItemSeeder extends Seeder
         $copperOre = Item::factory()->create(['name' => 'Copper Ore', 'slug' => 'copper-ore']);
         $goldOre = Item::factory()->create(['name' => 'Gold Ore', 'slug' => 'gold-ore']);
         $coalOre = Item::factory()->create(['name' => 'Coal Ore', 'slug' => 'coal-ore']);
+        $ironBar = Item::factory()->create(['name' => 'Iron Bar', 'slug' => 'iron-bar']);
     }
 }

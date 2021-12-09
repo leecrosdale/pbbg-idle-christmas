@@ -47,6 +47,18 @@ class Character extends Model
         $this->save();
     }
 
+    public function addExperience(Task $task)
+    {
+        $skillsGained = $task->skills_gained;
+
+        foreach ($skillsGained as $slug => $xp)
+        {
+            $skill = Skill::where('slug', $slug)->firstOrFail();
+            $characterSkill = CharacterSkill::where('skill_id', $skill->id)->firstOrFail();
+            $characterSkill->addExperience($xp);
+        }
+    }
+
     public function tickTask($clientTick = true)
     {
         $this->last_task_tick = now();

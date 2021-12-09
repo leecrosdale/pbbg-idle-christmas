@@ -9,6 +9,11 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'items_required' => 'object',
+        'skills_gained' => 'object'
+    ];
+
     public function item()
     {
         return $this->belongsTo(Item::class);
@@ -17,6 +22,11 @@ class Task extends Model
     public function characters()
     {
         return $this->hasMany(Character::class);
+    }
+
+    public function skill()
+    {
+        return $this->belongsTo(Skill::class);
     }
 
     public function active_characters()
@@ -32,11 +42,26 @@ class Task extends Model
         $taskTimeInSeconds = $this->time_in_seconds;
 
         if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
+
+            if ($this->items_required) {
+
+                foreach ($this->items_required as $k => $qty) {
+                    $item = Item::where(['slug' => $k])->firstOrFail();
+                    $characterItem = $character->items()->where('item_id', $item->id)->where('quantity', '>=', $qty)->firstOrFail();
+
+                    $characterItem->quantity -= $qty;
+                    $characterItem->save();
+                }
+
+            }
+
             $character->addItem($itemGained, $quantityGained);
+            $character->addExperience($this);
             $character->tickTask($clientTick);
+
+            return true;
         }
+
+        return false;
     }
-
-
-
 }

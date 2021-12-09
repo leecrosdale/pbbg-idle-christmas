@@ -5274,6 +5274,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TaskComponent",
@@ -5358,13 +5365,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.recalculateCurrentProgress();
 
       if (this.currentSeconds >= this.seconds_per_tick) {
-        this.stop();
-        this.quantity += this.quantity_per_tick;
+        this.stop(); // this.quantity += this.quantity_per_tick;
+
         this.currentSeconds = 0;
         axios.get('/task/' + this.task.id + '/work').then(function (response) {
+          _this3.quantity += response.data.item_quantity;
+
           _this3.startTick();
 
           _this3.recalculateCurrentProgress();
+        })["catch"](function (error) {
+          console.log(error);
+          _this3.currentSeconds = 0;
+
+          _this3.stop();
+
+          _this3.setActiveTask({});
         });
       }
     },
@@ -5477,15 +5493,58 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_Task__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Task */ "./resources/js/store/modules/Task.js");
+/* harmony import */ var _modules_Skills__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Skills */ "./resources/js/store/modules/Skills.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
-    task: _modules_Task__WEBPACK_IMPORTED_MODULE_2__["default"]
+    task: _modules_Task__WEBPACK_IMPORTED_MODULE_2__["default"],
+    skills: _modules_Skills__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Skills.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/modules/Skills.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var state = {
+  skills: []
+};
+var getters = {
+  getSkills: function getSkills(state) {
+    return state.skills;
+  }
+};
+var mutations = {
+  setSkills: function setSkills(state, skills) {
+    state.skills = skills;
+  }
+};
+var actions = {
+  setSkills: function setSkills(_ref, skills) {
+    var commit = _ref.commit;
+    commit('setSkills', skills);
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -28093,6 +28152,27 @@ var render = function () {
       _c("div", [
         _vm._v("every " + _vm._s(_vm.task.time_in_seconds) + " seconds"),
       ]),
+      _vm._v(" "),
+      _vm.task.items_required
+        ? _c(
+            "div",
+            [
+              _vm._v("\n        Requires\n        "),
+              _vm._l(_vm.task.items_required, function (qty, slug) {
+                return _c("p", [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(qty) +
+                      " x " +
+                      _vm._s(slug) +
+                      "\n        "
+                  ),
+                ])
+              }),
+            ],
+            2
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "progress w-100" }, [
         _c("div", {
