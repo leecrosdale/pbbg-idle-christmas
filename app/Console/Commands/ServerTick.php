@@ -43,7 +43,6 @@ class ServerTick extends Command
         $loopCount = 0;
         $totalLoops = 60;
 
-        while (true) {
             do {
 
                 $start = microtime(true);
@@ -69,8 +68,7 @@ class ServerTick extends Command
 
             } while ($loopCount < $totalLoops);
 
-        }
-
+        
 //
 //        return Command::SUCCESS;
     }
