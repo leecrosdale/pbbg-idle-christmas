@@ -113,12 +113,14 @@ export default {
         },
         start() {
             axios.get('/task/' + this.task.id + '/start').then(response => {
+                if (response.data.active) {
+                    this.setActiveTask(this.task);
+                    this.startTick();
+                }
 
-
-                this.setActiveTask(this.task);
-                this.startTick();
                 this.setItems(response.data.items);
                 this.setCharacterItems(response.data.character_items);
+
             });
         },
         startTick() {
@@ -141,8 +143,14 @@ export default {
                 this.currentSeconds = 0;
 
                 axios.get('/task/' + this.task.id + '/work').then(response => {
-                    this.quantity += response.data.task.item_quantity;
-                    this.startTick();
+
+                    if (response.data.active) {
+                        this.quantity += response.data.task.item_quantity;
+                        this.startTick();
+                    } else {
+                        stop();
+                    }
+
                     this.recalculateCurrentProgress();
                     this.setItems(response.data.items);
                     this.setCharacterItems(response.data.character_items);

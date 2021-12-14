@@ -23,10 +23,11 @@ class Task extends Model
     {
         $records = [];
 
-        foreach ($this->items_required as $slug => $qty)
-        {
-            $record = Item::where('slug', $slug)->first();
-            $records[] = $record;
+        if ($this->items_required) {
+            foreach ($this->items_required as $slug => $qty) {
+                $record = Item::where('slug', $slug)->first();
+                $records[] = $record;
+            }
         }
 
         return $records;

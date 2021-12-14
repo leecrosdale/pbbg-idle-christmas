@@ -5362,9 +5362,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get('/task/' + this.task.id + '/start').then(function (response) {
-        _this.setActiveTask(_this.task);
+        if (response.data.active) {
+          _this.setActiveTask(_this.task);
 
-        _this.startTick();
+          _this.startTick();
+        }
 
         _this.setItems(response.data.items);
 
@@ -5394,9 +5396,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         this.currentSeconds = 0;
         axios.get('/task/' + this.task.id + '/work').then(function (response) {
-          _this3.quantity += response.data.task.item_quantity;
+          if (response.data.active) {
+            _this3.quantity += response.data.task.item_quantity;
 
-          _this3.startTick();
+            _this3.startTick();
+          } else {
+            stop();
+          }
 
           _this3.recalculateCurrentProgress();
 

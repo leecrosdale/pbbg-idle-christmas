@@ -16,7 +16,11 @@ class TaskController extends Controller
         $character->setActiveTask($task);
         $character->tickTask(true);
 
-        return ['character_items' => $character->items, 'items' => $task->items];
+        if (!$character->hasRequiredItems($task)) {
+            $character->clearActiveTask();
+        }
+
+        return ['active' => $character->active_task_id !== null, 'character_items' => $character->items, 'items' => $task->items];
     }
 
     public function work(Task $task)
@@ -30,8 +34,7 @@ class TaskController extends Controller
             $character->clearActiveTask();
         }
 
-
-        return ['character_items' => $character->items, 'task' => $task, 'items' => $task->items];
+        return ['active' => $character->active_task_id !== null, 'character_items' => $character->items, 'task' => $task, 'items' => $task->items];
     }
 
     /**

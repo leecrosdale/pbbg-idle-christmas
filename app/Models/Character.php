@@ -55,12 +55,14 @@ class Character extends Model
 
     public function hasRequiredItems(Task $task)
     {
-        foreach ($task->items_required as $k => $qty) {
-            $item = Item::where(['slug' => $k])->firstOrFail();
-            $characterItem = $this->items()->where('item_id', $item->id)->where('quantity', '>=', $qty)->first();
+        if ($task->items_required) {
+            foreach ($task->items_required as $k => $qty) {
+                $item = Item::where(['slug' => $k])->firstOrFail();
+                $characterItem = $this->items()->where('item_id', $item->id)->where('quantity', '>=', $qty)->first();
 
-            if (!$characterItem) {
-                return false;
+                if (!$characterItem) {
+                    return false;
+                }
             }
         }
 
