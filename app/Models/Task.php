@@ -19,6 +19,20 @@ class Task extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function getItemsAttribute()
+    {
+        $records = [];
+
+        foreach ($this->items_required as $slug => $qty)
+        {
+            $record = Item::where('slug', $slug)->first();
+            $records[] = $record;
+        }
+
+        return $records;
+
+    }
+
     public function characters()
     {
         return $this->hasMany(Character::class);
@@ -44,7 +58,6 @@ class Task extends Model
         if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
 
             if ($this->items_required) {
-
                 foreach ($this->items_required as $k => $qty) {
                     $item = Item::where(['slug' => $k])->firstOrFail();
                     $characterItem = $character->items()->where('item_id', $item->id)->where('quantity', '>=', $qty)->firstOrFail();
@@ -52,7 +65,6 @@ class Task extends Model
                     $characterItem->quantity -= $qty;
                     $characterItem->save();
                 }
-
             }
 
             $character->addItem($itemGained, $quantityGained);

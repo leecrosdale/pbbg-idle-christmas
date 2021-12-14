@@ -5281,6 +5281,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TaskComponent",
@@ -5328,15 +5331,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)({
-    activeTask: 'task/getActiveTask'
+    activeTask: 'task/getActiveTask',
+    items: 'items/getItems',
+    getItem: 'items/getItem',
+    getCharacterItem: 'characterItems/getCharacterItem'
   })), {}, {
     isActive: function isActive() {
       return this.activeTask.id === this.task.id;
     }
   }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)({
-    setActiveTask: 'task/setActiveTask'
+    setActiveTask: 'task/setActiveTask',
+    setItems: 'items/setItems',
+    setCharacterItems: 'characterItems/setCharacterItems'
   })), {}, {
+    showItemQuantity: function showItemQuantity(slug) {
+      var item = this.getItem(slug);
+
+      if (item) {
+        var characterItem = this.getCharacterItem(item.id);
+
+        if (characterItem) {
+          return characterItem.quantity;
+        }
+      }
+
+      return 0;
+    },
     start: function start() {
       var _this = this;
 
@@ -5344,6 +5365,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.setActiveTask(_this.task);
 
         _this.startTick();
+
+        _this.setItems(response.data.items);
+
+        _this.setCharacterItems(response.data.character_items);
       });
     },
     startTick: function startTick() {
@@ -5369,11 +5394,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         this.currentSeconds = 0;
         axios.get('/task/' + this.task.id + '/work').then(function (response) {
-          _this3.quantity += response.data.item_quantity;
+          _this3.quantity += response.data.task.item_quantity;
 
           _this3.startTick();
 
           _this3.recalculateCurrentProgress();
+
+          _this3.setItems(response.data.items);
+
+          _this3.setCharacterItems(response.data.character_items);
         })["catch"](function (error) {
           console.log(error);
           _this3.currentSeconds = 0;
@@ -5387,6 +5416,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     stop: function stop() {
       clearInterval(this.intervalId);
       this.intervalId = null;
+      this.recalculateCurrentProgress();
     },
     recalculateCurrentProgress: function recalculateCurrentProgress() {
       var upper = this.seconds_per_tick;
@@ -5494,17 +5524,117 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_Task__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Task */ "./resources/js/store/modules/Task.js");
 /* harmony import */ var _modules_Skills__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Skills */ "./resources/js/store/modules/Skills.js");
+/* harmony import */ var _modules_Items__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Items */ "./resources/js/store/modules/Items.js");
+/* harmony import */ var _modules_CharacterItems__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/CharacterItems */ "./resources/js/store/modules/CharacterItems.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     task: _modules_Task__WEBPACK_IMPORTED_MODULE_2__["default"],
-    skills: _modules_Skills__WEBPACK_IMPORTED_MODULE_3__["default"]
+    skills: _modules_Skills__WEBPACK_IMPORTED_MODULE_3__["default"],
+    items: _modules_Items__WEBPACK_IMPORTED_MODULE_4__["default"],
+    characterItems: _modules_CharacterItems__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/CharacterItems.js":
+/*!******************************************************!*\
+  !*** ./resources/js/store/modules/CharacterItems.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var state = {
+  character_items: []
+};
+var getters = {
+  getCharacterItems: function getCharacterItems(state) {
+    return state.character_items;
+  },
+  getCharacterItem: function getCharacterItem(state) {
+    return function (itemId) {
+      return state.character_items.find(function (item) {
+        return item.item_id === itemId;
+      });
+    };
+  }
+};
+var mutations = {
+  setCharacterItems: function setCharacterItems(state, items) {
+    state.character_items = items;
+  }
+};
+var actions = {
+  setCharacterItems: function setCharacterItems(_ref, items) {
+    var commit = _ref.commit;
+    commit('setCharacterItems', items);
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Items.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/Items.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var state = {
+  items: []
+};
+var getters = {
+  getItems: function getItems(state) {
+    return state.items;
+  },
+  getItem: function getItem(state) {
+    return function (slug) {
+      return state.items.find(function (item) {
+        return item.slug === slug;
+      });
+    };
+  }
+};
+var mutations = {
+  setItems: function setItems(state, items) {
+    state.items = items;
+  }
+};
+var actions = {
+  setItems: function setItems(_ref, items) {
+    var commit = _ref.commit;
+    commit('setItems', items);
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -28146,11 +28276,21 @@ var render = function () {
       _c("div", [_vm._v(_vm._s(_vm.task.title))]),
       _vm._v(" "),
       _c("div", [
-        _vm._v(_vm._s(_vm.task.item_quantity) + " x " + _vm._s(_vm.item.name)),
+        _c("span", { staticClass: "badge bg-success" }, [
+          _vm._v(_vm._s(_vm.task.item_quantity)),
+        ]),
+        _vm._v(" x " + _vm._s(_vm.item.name) + " - "),
+        _c("span", { staticClass: "badge bg-success" }, [
+          _vm._v(_vm._s(_vm.quantity)),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", [
-        _vm._v("every " + _vm._s(_vm.task.time_in_seconds) + " seconds"),
+        _vm._v("every "),
+        _c("span", { staticClass: "badge bg-success" }, [
+          _vm._v(_vm._s(_vm.task.time_in_seconds)),
+        ]),
+        _vm._v(" seconds"),
       ]),
       _vm._v(" "),
       _vm.task.items_required
@@ -28160,13 +28300,17 @@ var render = function () {
               _vm._v("\n        Requires\n        "),
               _vm._l(_vm.task.items_required, function (qty, slug) {
                 return _c("p", [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(qty) +
-                      " x " +
-                      _vm._s(slug) +
-                      "\n        "
-                  ),
+                  _c("span", { staticClass: "badge bg-danger" }, [
+                    _vm._v(_vm._s(qty)),
+                  ]),
+                  _vm._v(" x " + _vm._s(slug) + "\n            "),
+                  _c("span", { staticClass: "badge bg-success" }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.showItemQuantity(slug)) +
+                        "\n            "
+                    ),
+                  ]),
                 ])
               }),
             ],
@@ -28186,10 +28330,6 @@ var render = function () {
             "aria-valuemax": "100",
           },
         }),
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "badge bg-danger" }, [
-        _vm._v(_vm._s(_vm.quantity)),
       ]),
     ]
   )

@@ -3,13 +3,16 @@
     <div @click="start" class="col-md-6 border m-3 p-3 text-center text-white-50" :class="isActive ? 'bg-primary' : 'bg-secondary'">
         <div>{{ task.name }}</div>
         <div>{{ task.title }}</div>
-        <div>{{ task.item_quantity}} x {{ item.name }}</div>
-        <div>every {{ task.time_in_seconds }} seconds</div>
+        <div><span class="badge bg-success">{{ task.item_quantity }}</span> x {{ item.name }} - <span class="badge bg-success">{{ quantity }}</span></div>
+        <div>every <span class="badge bg-success">{{ task.time_in_seconds }}</span> seconds</div>
 
         <div v-if="task.items_required">
             Requires
             <p v-for="(qty, slug) in task.items_required">
-                {{ qty }} x {{ slug }}
+                <span class="badge bg-danger">{{ qty }}</span> x {{ slug }}
+                <span class="badge bg-success">
+                    {{ showItemQuantity(slug) }}
+                </span>
             </p>
         </div>
 
@@ -23,7 +26,7 @@
             </div>
         </div>
 
-        <span class="badge bg-danger">{{ quantity }}</span>
+
 
     </div>
 
@@ -80,7 +83,10 @@ export default {
     },
     computed: {
         ...mapGetters({
-            activeTask: 'task/getActiveTask'
+            activeTask: 'task/getActiveTask',
+            items: 'items/getItems',
+            getItem:  'items/getItem',
+            getCharacterItem: 'characterItems/getCharacterItem',
         }),
         isActive() {
             return this.activeTask.id === this.task.id;
@@ -88,12 +94,31 @@ export default {
     },
     methods: {
         ...mapActions({
-           setActiveTask: 'task/setActiveTask',
+            setActiveTask: 'task/setActiveTask',
+            setItems: 'items/setItems',
+            setCharacterItems: 'characterItems/setCharacterItems'
         }),
+        showItemQuantity(slug) {
+
+            let item = this.getItem(slug);
+
+            if (item) {
+                let characterItem = this.getCharacterItem(item.id);
+                if (characterItem) {
+                    return characterItem.quantity;
+                }
+
+            }
+            return 0;
+        },
         start() {
             axios.get('/task/' + this.task.id + '/start').then(response => {
+
+
                 this.setActiveTask(this.task);
                 this.startTick();
+                this.setItems(response.data.items);
+                this.setCharacterItems(response.data.character_items);
             });
         },
         startTick() {
@@ -116,9 +141,11 @@ export default {
                 this.currentSeconds = 0;
 
                 axios.get('/task/' + this.task.id + '/work').then(response => {
-                    this.quantity += response.data.item_quantity;
+                    this.quantity += response.data.task.item_quantity;
                     this.startTick();
                     this.recalculateCurrentProgress();
+                    this.setItems(response.data.items);
+                    this.setCharacterItems(response.data.character_items);
                 }).catch(error => {
                     console.log(error);
                     this.currentSeconds = 0;
@@ -130,6 +157,7 @@ export default {
         stop() {
             clearInterval(this.intervalId)
             this.intervalId = null;
+            this.recalculateCurrentProgress();
         },
         recalculateCurrentProgress() {
             const upper = this.seconds_per_tick;

@@ -16,14 +16,22 @@ class TaskController extends Controller
         $character->setActiveTask($task);
         $character->tickTask(true);
 
-        return redirect()->back();
+        return ['character_items' => $character->items, 'items' => $task->items];
     }
 
     public function work(Task $task)
     {
+        /** @var Character $character */
         $character = auth()->user()->character;
+
         $task->work($character, true);
-        return $task;
+
+        if (!$character->hasRequiredItems($task)) {
+            $character->clearActiveTask();
+        }
+
+
+        return ['character_items' => $character->items, 'task' => $task, 'items' => $task->items];
     }
 
     /**

@@ -47,6 +47,27 @@ class Character extends Model
         $this->save();
     }
 
+    public function clearActiveTask()
+    {
+        $this->active_task_id = null;
+        $this->save();
+    }
+
+    public function hasRequiredItems(Task $task)
+    {
+        foreach ($task->items_required as $k => $qty) {
+            $item = Item::where(['slug' => $k])->firstOrFail();
+            $characterItem = $this->items()->where('item_id', $item->id)->where('quantity', '>=', $qty)->first();
+
+            if (!$characterItem) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
     public function addExperience(Task $task)
     {
         $skillsGained = $task->skills_gained;
