@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Character;
+use App\Models\CharacterItem;
+use App\Models\CharacterSkill;
+use App\Models\Item;
+use App\Models\Skill;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -69,5 +75,20 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $character = Character::factory()->create(['user_id' => $user->id, 'active' => true]);
+
+        foreach(Skill::all() as $skill)
+        {
+            CharacterSkill::factory()->create(['character_id' => $character->id, 'skill_id' => $skill->id]);
+        }
+
+        foreach (Item::all() as $item)
+        {
+            CharacterItem::factory()->create(['quantity' => 0, 'item_id' => $item->id, 'character_id' => $character->id]);
+        }
     }
 }
