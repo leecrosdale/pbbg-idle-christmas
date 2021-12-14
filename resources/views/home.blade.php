@@ -14,7 +14,14 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    @if (auth()->user()->character->active_task_id)
+                        Your current active task is {{ \App\Models\Task::find(auth()->user()->character->active_task_id)->title }}
+                    @else
+
+                        You have no active task!
+
+                    @endif
+
                 </div>
             </div>
         </div>
