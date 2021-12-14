@@ -27,6 +27,7 @@ import store from './store';
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('task-component', require('./components/TaskComponent.vue').default);
+Vue.component('skill-component', require('./components/SkillComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

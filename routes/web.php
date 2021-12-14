@@ -20,19 +20,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-Route::get('/test', function() {
-
-    $tasks = Task::with('active_characters')->get();
-
-    dd($tasks);
-
-});
 
 Route::group(['middleware' => 'auth:web'], function() {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('skill', \App\Http\Controllers\SkillController::class);
     Route::get('/task/{task}/start', [\App\Http\Controllers\TaskController::class, 'start'])->name('task.start');
     Route::get('/task/{task}/work', [\App\Http\Controllers\TaskController::class, 'work'])->name('task.work');
+    Route::get('bank', [\App\Http\Controllers\BankController::class, 'index'])->name('bank');
+    Route::get('shop', [\App\Http\Controllers\ShopController::class, 'index'])->name('shop');
+
+
 });

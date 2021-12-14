@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Character;
+use App\Models\CharacterItem;
 use App\Models\CharacterSkill;
 use App\Models\Country;
+use App\Models\Item;
 use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -32,6 +34,11 @@ class DatabaseSeeder extends Seeder
             foreach($skills as $skill)
             {
                 CharacterSkill::factory()->create(['character_id' => $character->id, 'skill_id' => $skill->id]);
+            }
+
+            foreach (Item::all() as $item)
+            {
+                CharacterItem::factory()->create(['quantity' => 0, 'item_id' => $item->id, 'character_id' => $character->id]);
             }
 
         });

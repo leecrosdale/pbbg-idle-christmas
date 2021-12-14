@@ -20,7 +20,12 @@ class TaskController extends Controller
             $character->clearActiveTask();
         }
 
-        return ['active' => $character->active_task_id !== null, 'character_items' => $character->items, 'items' => $task->items];
+        return [
+            'active' => $character->active_task_id !== null,
+            'character_items' => $character->items,
+            'items' => $task->items,
+            'skills' => $character->character_skills()->with('skill')->get()
+        ];
     }
 
     public function work(Task $task)
@@ -34,7 +39,12 @@ class TaskController extends Controller
             $character->clearActiveTask();
         }
 
-        return ['active' => $character->active_task_id !== null, 'character_items' => $character->items, 'task' => $task, 'items' => $task->items];
+        return [
+            'active' => $character->active_task_id !== null,
+            'character_items' => $character->items,
+            'task' => $task, 'items' => $task->items,
+            'skills' => $character->character_skills()->with('skill')->get()
+        ];
     }
 
     /**

@@ -53,11 +53,20 @@
                             @endif
                         @else
 
-                            @foreach(auth()->user()->character->character_skills as $skill)
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('skill.show', $skill->skill->slug) }}">{{ $skill->skill->name }} ({{$skill->level}} / {{ $skill->skill->max_level }})</a>
+                                <a class="nav-link" href="{{ route('home') }}">Stats</a>
                             </li>
-                            @endforeach
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('bank') }}">Bank</a>
+                            </li>
+
+{{--                            <li class="nav-item">--}}
+{{--                                <a class="nav-link" href="{{ route('shop') }}">Shop</a>--}}
+{{--                            </li>--}}
+
+
+                            <skill-component :initial_skills="{{ auth()->user()->character->character_skills()->with('skill')->get() }}"></skill-component>
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

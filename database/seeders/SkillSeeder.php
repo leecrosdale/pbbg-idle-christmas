@@ -20,8 +20,9 @@ class SkillSeeder extends Seeder
             'Mining',
             'Smithing',
             'Crafting',
-            'Farming',
-            'Cooking',
+//            'Wrapping',
+//            'Farming',
+//            'Cooking',
         ];
 
         foreach ($skills as $skill)

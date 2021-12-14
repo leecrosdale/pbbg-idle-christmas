@@ -96,7 +96,8 @@ export default {
         ...mapActions({
             setActiveTask: 'task/setActiveTask',
             setItems: 'items/setItems',
-            setCharacterItems: 'characterItems/setCharacterItems'
+            setCharacterItems: 'characterItems/setCharacterItems',
+            setSkills: 'skills/setSkills'
         }),
         showItemQuantity(slug) {
 
@@ -120,6 +121,7 @@ export default {
 
                 this.setItems(response.data.items);
                 this.setCharacterItems(response.data.character_items);
+                this.setSkills(response.data.skills);
 
             });
         },
@@ -154,6 +156,8 @@ export default {
                     this.recalculateCurrentProgress();
                     this.setItems(response.data.items);
                     this.setCharacterItems(response.data.character_items);
+                    this.setSkills(response.data.skills);
+
                 }).catch(error => {
                     console.log(error);
                     this.currentSeconds = 0;
