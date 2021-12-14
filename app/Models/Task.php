@@ -47,7 +47,8 @@ class Task extends Model
     public function active_characters()
     {
         return $this->hasMany(Character::class, 'active_task_id')
-            ->where('last_task_client_tick', '<=', now()->subSeconds(30));
+            ->where('last_task_client_tick', '<=', now()->subSeconds(30))
+            ->where('last_task_client_tick', '>=', now()->subHour());
     }
 
     public function work(Character $character, $clientTick = false)
