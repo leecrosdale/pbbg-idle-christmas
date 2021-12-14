@@ -57,6 +57,11 @@ class Task extends Model
         $quantityGained = $this->item_quantity;
         $taskTimeInSeconds = $this->time_in_seconds;
 
+        if (!$character->hasRequiredItems($this)) {
+            $character->clearActiveTask();
+            return false;
+        }
+
         if (now()->diffInSeconds($character->last_task_tick) >= $taskTimeInSeconds) {
 
             if ($this->items_required) {

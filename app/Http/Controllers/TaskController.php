@@ -35,10 +35,6 @@ class TaskController extends Controller
 
         $task->work($character, true);
 
-        if (!$character->hasRequiredItems($task)) {
-            $character->clearActiveTask();
-        }
-
         return [
             'active' => $character->active_task_id !== null,
             'character_items' => $character->items,

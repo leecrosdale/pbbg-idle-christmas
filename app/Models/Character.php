@@ -77,7 +77,7 @@ class Character extends Model
         foreach ($skillsGained as $slug => $xp)
         {
             $skill = Skill::where('slug', $slug)->firstOrFail();
-            $characterSkill = CharacterSkill::where('skill_id', $skill->id)->firstOrFail();
+            $characterSkill = $this->character_skills()->where('skill_id', $skill->id)->firstOrFail();
             $characterSkill->addExperience($xp);
         }
     }
