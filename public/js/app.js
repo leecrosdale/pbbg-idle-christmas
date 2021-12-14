@@ -5266,7 +5266,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SkillComponent",
   mounted: function mounted() {
+    var _this = this;
+
     this.setSkills(this.initial_skills);
+    this.intervalId = setInterval(function () {
+      return _this.tick();
+    }, 30000);
   },
   props: {
     initial_skills: {
@@ -5274,9 +5279,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       type: Array
     }
   },
-  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)({
+  data: function data() {
+    return {
+      intervalId: null
+    };
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)({
     setSkills: 'skills/setSkills'
-  })),
+  })), {}, {
+    tick: function tick() {
+      var _this2 = this;
+
+      axios.get('/skills').then(function (response) {
+        _this2.setSkills(response.data.skills);
+      });
+    }
+  }),
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)({
     skills: 'skills/getSkills'
   }))

@@ -18,6 +18,12 @@ class SkillController extends Controller
         //
     }
 
+    public function skills()
+    {
+        $character = auth()->user()->character;
+        return ['skills' => $character->character_skills()->with('skill')->get()];
+    }
+
     /**
      * Show the form for creating a new resource.
      *

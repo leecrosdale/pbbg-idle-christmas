@@ -17,6 +17,7 @@ export default {
     name: "SkillComponent",
     mounted() {
         this.setSkills(this.initial_skills);
+        this.intervalId = setInterval(() => this.tick(), 30000);
     },
     props: {
         initial_skills: {
@@ -24,10 +25,20 @@ export default {
           type: Array
       }
     },
+    data() {
+        return {
+            intervalId: null
+        }
+    },
     methods: {
         ...mapActions({
             setSkills: 'skills/setSkills'
-        })
+        }),
+        tick() {
+            axios.get('/skills').then(response => {
+                this.setSkills(response.data.skills);
+            });
+        }
     },
     computed: {
         ...mapGetters({

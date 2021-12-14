@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:web'], function() {
     Route::get('/task/{task}/work', [\App\Http\Controllers\TaskController::class, 'work'])->name('task.work');
     Route::get('bank', [\App\Http\Controllers\BankController::class, 'index'])->name('bank');
     Route::get('shop', [\App\Http\Controllers\ShopController::class, 'index'])->name('shop');
+    Route::get('skills', [\App\Http\Controllers\SkillController::class, 'skills'])->name('skills');
 
 
 });
