@@ -28938,7 +28938,7 @@ var render = function () {
       _c("div", [
         _vm._v("every "),
         _c("span", { staticClass: "badge bg-success" }, [
-          _vm._v(_vm._s(_vm.task.time_in_seconds + 1)),
+          _vm._v(_vm._s(_vm.task.time_in_seconds)),
         ]),
         _vm._v(" seconds"),
       ]),

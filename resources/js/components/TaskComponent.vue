@@ -4,8 +4,8 @@
         <div>{{ task.name }}</div>
         <div>{{ task.title }}</div>
         <div><span class="badge bg-success">{{ task.item_quantity }}</span> x {{ item.name }} - <span class="badge bg-success">{{ quantity }}</span></div>
-        <div>every <span class="badge bg-success">{{ task.time_in_seconds + 1 }}</span> seconds</div>
-        
+        <div>every <span class="badge bg-success">{{ task.time_in_seconds }}</span> seconds</div>
+
         <div v-if="task.items_required">
             Requires
             <p v-for="(qty, slug) in task.items_required">
