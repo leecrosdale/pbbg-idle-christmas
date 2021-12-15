@@ -5464,18 +5464,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.currentSeconds++;
       this.recalculateCurrentProgress();
 
-      if (this.currentSeconds >= this.seconds_per_tick) {
-        this.stop(); // this.quantity += this.quantity_per_tick;
-
-        this.currentSeconds = 0;
+      if (this.currentSeconds > this.seconds_per_tick) {
+        this.stop();
         axios.get('/task/' + this.task.id + '/work').then(function (response) {
           if (response.data.active) {
             _this3.quantity += response.data.task.item_quantity;
 
             _this3.startTick();
           } else {
-            stop();
+            _this3.stop();
           }
+
+          _this3.recalculateCurrentProgress();
 
           _this3.recalculateCurrentProgress();
 
@@ -5495,6 +5495,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     stop: function stop() {
+      this.currentSeconds = 0;
       clearInterval(this.intervalId);
       this.intervalId = null;
       this.recalculateCurrentProgress();
@@ -28501,7 +28502,7 @@ var render = function () {
       _c("div", [
         _vm._v("every "),
         _c("span", { staticClass: "badge bg-success" }, [
-          _vm._v(_vm._s(_vm.task.time_in_seconds)),
+          _vm._v(_vm._s(_vm.task.time_in_seconds + 1)),
         ]),
         _vm._v(" seconds"),
       ]),

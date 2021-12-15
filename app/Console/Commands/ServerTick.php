@@ -43,12 +43,17 @@ class ServerTick extends Command
         $loopCount = 0;
         $totalLoops = 60;
 
+        while (true) {
             do {
 
                 $start = microtime(true);
                 $this->comment("Starting loop {$loopCount}");
 
                 $tasks = Task::with('active_characters')->get();
+
+                if ($tasks->isEmpty()) {
+                    return Command::SUCCESS;
+                }
 
                 foreach ($tasks as $task) {
                     $characters = $task->active_characters;
@@ -68,8 +73,9 @@ class ServerTick extends Command
 
             } while ($loopCount < $totalLoops);
 
-        
+        }
+
 //
-//        return Command::SUCCESS;
+        return Command::SUCCESS;
     }
 }

@@ -4,8 +4,8 @@
         <div>{{ task.name }}</div>
         <div>{{ task.title }}</div>
         <div><span class="badge bg-success">{{ task.item_quantity }}</span> x {{ item.name }} - <span class="badge bg-success">{{ quantity }}</span></div>
-        <div>every <span class="badge bg-success">{{ task.time_in_seconds }}</span> seconds</div>
-
+        <div>every <span class="badge bg-success">{{ task.time_in_seconds + 1 }}</span> seconds</div>
+        
         <div v-if="task.items_required">
             Requires
             <p v-for="(qty, slug) in task.items_required">
@@ -129,20 +129,20 @@ export default {
             this.intervalId = setInterval(() => this.tick(), 1000);
         },
         tick() {
+
+
             if (this.activeTask.id !== this.task.id) {
                 this.stop();
                 return;
             }
 
-            this.currentSeconds++;
 
+            this.currentSeconds++;
             this.recalculateCurrentProgress();
 
-            if (this.currentSeconds >= this.seconds_per_tick) {
+            if (this.currentSeconds > this.seconds_per_tick) {
 
                 this.stop();
-                // this.quantity += this.quantity_per_tick;
-                this.currentSeconds = 0;
 
                 axios.get('/task/' + this.task.id + '/work').then(response => {
 
@@ -150,8 +150,11 @@ export default {
                         this.quantity += response.data.task.item_quantity;
                         this.startTick();
                     } else {
-                        stop();
+                        this.stop();
                     }
+
+
+                    this.recalculateCurrentProgress();
 
                     this.recalculateCurrentProgress();
                     this.setItems(response.data.items);
@@ -165,8 +168,11 @@ export default {
                     this.setActiveTask({});
                 });
             }
+
+
         },
         stop() {
+            this.currentSeconds = 0;
             clearInterval(this.intervalId)
             this.intervalId = null;
             this.recalculateCurrentProgress();
