@@ -1,6 +1,6 @@
 <template>
 
-    <div @click="start" class="col-md-6 border m-3 p-3 text-center text-white-50" :class="isActive ? 'bg-primary' : 'bg-secondary'">
+    <div @click="start" class="col-md-6 border m-3 p-3 text-center text-white-50" :class="status">
         <div>{{ task.name }}</div>
         <div>{{ task.title }}</div>
         <div><span class="badge bg-success">{{ task.item_quantity }}</span> x {{ item.name }} - <span class="badge bg-success">{{ quantity }}</span></div>
@@ -90,6 +90,18 @@ export default {
         }),
         isActive() {
             return this.activeTask.id === this.task.id;
+        },
+        status() {
+            if (this.isActive && this.currentSeconds !== this.seconds_per_tick) {
+                return 'bg-primary';
+            } else if (this.currentSeconds === this.seconds_per_tick) {
+                return 'bg-primary shake';
+            } else {
+                return 'bg-secondary';
+            }
+        },
+        complete() {
+            return this.currentSeconds > this.seconds_per_tick;
         }
     },
     methods: {
@@ -140,7 +152,7 @@ export default {
             this.currentSeconds++;
             this.recalculateCurrentProgress();
 
-            if (this.currentSeconds > this.seconds_per_tick) {
+            if (this.complete) {
 
                 this.stop();
 
@@ -187,5 +199,24 @@ export default {
 </script>
 
 <style scoped>
+
+.shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
 
 </style>
